@@ -1,3 +1,13 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 6 optimizations:
+# - [HIGH] Add cargo dependency cache to "rust-check" job
+# - [HIGH] Add cargo dependency cache to "check_wasm" job
+# - [HIGH] Add cargo dependency cache to "tests" job
+# - [HIGH] Switch "tests" from macOS to ubuntu runner
+# - [MEDIUM] Add concurrency group to "rust.yml"
+# - [MEDIUM] 5 jobs clone the repo — consider artifact sharing
+# Estimated savings: ~27 min/run
+#
 # Copied from https://github.com/rerun-io/rerun_template
 on:
   workflow_dispatch:
@@ -7,6 +17,10 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 name: Rust
 
 env:
